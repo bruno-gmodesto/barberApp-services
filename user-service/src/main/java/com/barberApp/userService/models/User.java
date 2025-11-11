@@ -39,6 +39,10 @@ public class User implements UserDetails {
     @NotBlank
     private String phone;
 
+    @Column(nullable = false)
+    @NotBlank
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private User_Role userRole = User_Role.USER;
@@ -50,16 +54,11 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.userRole == User_Role.ADMIN) {
             return Stream.of(User_Role.values())
-                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                    .map(role -> new SimpleGrantedAuthority(role.name()))
                     .collect(Collectors.toList());
         } else {
-            return List.of(new SimpleGrantedAuthority("ROLE_" + this.userRole.name()));
+            return List.of(new SimpleGrantedAuthority(this.userRole.name()));
         }
-    }
-
-    @Override
-    public String getPassword() {
-        return null; // User-service nao gerencia senhas
     }
 
     @Override

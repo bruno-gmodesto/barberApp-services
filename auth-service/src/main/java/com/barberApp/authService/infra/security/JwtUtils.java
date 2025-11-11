@@ -40,6 +40,7 @@ public class JwtUtils {
                 .withExpiresAt(ExpirationDate())
                 .withIssuedAt(Date.from(Instant.now()))
                 .withClaim("userId", user.getId().toString())
+                .withClaim("email", user.getEmail())
                 .withClaim("user_role", user.getUserRole().toString());
 
         return tokenBuilder.sign(Algorithm.RSA256((RSAPublicKey) publicKey, (RSAPrivateKey) privateKey));

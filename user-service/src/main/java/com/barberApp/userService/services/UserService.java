@@ -2,6 +2,7 @@ package com.barberApp.userService.services;
 
 import com.barberApp.userService.dtos.GetUsersDTO;
 import com.barberApp.userService.dtos.UpdateDTO;
+import com.barberApp.userService.dtos.UpdateUserRoleDTO;
 import com.barberApp.userService.enums.User_Role;
 import com.barberApp.userService.models.User;
 import com.barberApp.userService.repositories.UserRepository;
@@ -60,5 +61,14 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found."));
         return new GetUsersDTO(user);
+    }
+
+    @Transactional
+    public void updateUserRole(UUID id, UpdateUserRoleDTO dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found."));
+
+        user.setUserRole(dto.role());
+        userRepository.save(user);
     }
 }

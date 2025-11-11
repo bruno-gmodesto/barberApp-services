@@ -1,4 +1,4 @@
-package com.barberApp.userService.infra.security;
+package com.barberApp.scheduleService.infra.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -2,11 +2,13 @@ package com.barberApp.userService.controllers;
 
 import com.barberApp.userService.dtos.GetUsersDTO;
 import com.barberApp.userService.dtos.UpdateDTO;
+import com.barberApp.userService.dtos.UpdateUserRoleDTO;
 import com.barberApp.userService.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -36,6 +38,13 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable UUID id, @RequestBody @Valid UpdateDTO dto) {
         userService.update(dto, id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/role")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> updateUserRole(@PathVariable UUID id, @RequestBody @Valid UpdateUserRoleDTO dto) {
+        userService.updateUserRole(id, dto);
         return ResponseEntity.ok().build();
     }
 

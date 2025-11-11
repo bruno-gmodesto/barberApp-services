@@ -1,4 +1,4 @@
-package com.barberApp.userService.infra.security;
+package com.barberApp.scheduleService.infra.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -81,14 +81,6 @@ public class JwtUtils {
     public String retrieveToken(HttpServletRequest request) {
         var authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null) return null;
-
-        // Remove "Bearer " or "bearer " prefix (case-insensitive) and trim whitespace
-        authorizationHeader = authorizationHeader.trim();
-        if (authorizationHeader.toLowerCase().startsWith("bearer ")) {
-            return authorizationHeader.substring(7).trim();
-        }
-
-        // If no "Bearer " prefix, return as is (useful for Swagger compatibility)
-        return authorizationHeader;
+        return authorizationHeader.replace("Bearer ", "");
     }
 }

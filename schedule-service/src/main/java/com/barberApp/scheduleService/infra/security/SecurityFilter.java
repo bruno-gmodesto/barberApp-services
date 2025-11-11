@@ -1,8 +1,8 @@
-package com.barberApp.userService.infra.security;
+package com.barberApp.scheduleService.infra.security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.barberApp.userService.dtos.AuthenticatedUserDTO;
-import com.barberApp.userService.enums.User_Role;
+import com.barberApp.scheduleService.dtos.AuthenticatedUserDTO;
+import com.barberApp.scheduleService.enums.User_Role;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
