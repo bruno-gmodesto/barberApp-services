@@ -2,6 +2,7 @@ package com.barberApp.userService.controllers;
 
 import com.barberApp.userService.dtos.GetUsersDTO;
 import com.barberApp.userService.dtos.UpdateDTO;
+import com.barberApp.userService.models.User;
 import com.barberApp.userService.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,13 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/{email}")
+    public ResponseEntity<GetUsersDTO> getUserByEmail(@PathVariable String email) {
+        var user = userService.findUserByEmail(email);
+        GetUsersDTO dto = new GetUsersDTO(user.getName(), user.getEmail(), user.getPhone(), user.getUserRole());
+        return ResponseEntity.ok(dto);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<GetUsersDTO> getUser(@PathVariable UUID id) {
         var user = userService.findUserById(id);
@@ -43,5 +51,11 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/is-barber")
+    public ResponseEntity<Boolean> isBarber(@PathVariable UUID id) {
+        Boolean isBarber = userService.isBarber(id);
+        return ResponseEntity.ok(isBarber);
     }
 }

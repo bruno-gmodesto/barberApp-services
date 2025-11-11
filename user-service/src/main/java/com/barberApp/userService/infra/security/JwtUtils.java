@@ -23,11 +23,6 @@ public class JwtUtils {
         this.publicKey = KeyLoader.loadPublicKey("public_key.pem");
     }
 
-    /**
-     * Validate a JWT token
-     * @param token JWT token to validate
-     * @return email (subject) from token
-     */
     public String validate(String token) {
         try {
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) publicKey, null);

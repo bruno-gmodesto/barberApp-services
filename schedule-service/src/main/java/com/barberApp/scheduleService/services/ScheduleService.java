@@ -38,14 +38,12 @@ public class ScheduleService {
             throw new IllegalStateException("Schedule already exists for this barber at this time");
         }
 
-        // Validate that user and barber exist
         if (userClient.getUser(dto.userId()) == null) {
             throw new IllegalArgumentException("User not found");
         }
         if (userClient.getUser(dto.barberId()) == null) {
             throw new IllegalArgumentException("Barber user not found");
         }
-        // Optionally validate role if endpoint is available
         if (validateBarberRole) {
             Boolean barber = userClient.isBarber(dto.barberId());
             if (barber == null || !barber) {

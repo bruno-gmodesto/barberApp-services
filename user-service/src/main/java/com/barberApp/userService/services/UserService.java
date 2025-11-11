@@ -61,4 +61,11 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found."));
         return new GetUsersDTO(user);
     }
+
+    @Transactional(readOnly = true)
+    public Boolean isBarber(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found."));
+        return user.getUserRole() == User_Role.BARBER;
+    }
 }

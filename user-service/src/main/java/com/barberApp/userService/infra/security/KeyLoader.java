@@ -1,6 +1,12 @@
 package com.barberApp.userService.infra.security;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -11,33 +17,26 @@ import java.util.Base64;
 public class KeyLoader {
 
     public static PublicKey loadPublicKey(String filename) throws Exception {
-        InputStream inputStream = KeyLoader.class.getClassLoader().getResourceAsStream(filename);
-        if (inputStream == null) {
-            throw new IllegalArgumentException("File not found: " + filename);
-        }
-
-        String key = new String(inputStream.readAllBytes())
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replace("-----END PUBLIC KEY-----", "")
-                .replaceAll("\\s", "");
-
-        byte[] keyBytes = Base64.getDecoder().decode(key);
-        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        return kf.generatePublic(spec);
+            try {
+                Resource res = new ClassPathResource(filename);
+                try (InputStream is = res.getInputStream()) {
+                    String pem = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+                    String content = pem.replaceAll("-----BEGIN (.*)-----", "")
+                            .replaceAll("-----END (.*)-----", "")
+                            .replaceAll("\\s", "");
+                    byte[] keyBytes = Base64.getDecoder().decode(content);
+                    X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+                    return KeyFactory.getInstance("RSA").generatePublic(spec);
+                }
+            } catch (Exception e) {
+                throw new IllegalStateException("Failed to load public key from classpath: " + filename, e);
+            }
     }
 
     public static PrivateKey loadPrivateKey(String filename) throws Exception {
-        InputStream inputStream = KeyLoader.class.getClassLoader().getResourceAsStream(filename);
-        if (inputStream == null) {
-            throw new IllegalArgumentException("File not found: " + filename);
-        }
-
-        String key = new String(inputStream.readAllBytes())
+        String key = new String(Files.readAllBytes(Paths.get(filename)))
                 .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "")
-                .replace("-----BEGIN RSA PRIVATE KEY-----", "")
-                .replace("-----END RSA PRIVATE KEY-----", "")
                 .replaceAll("\\s", "");
 
         byte[] keyBytes = Base64.getDecoder().decode(key);

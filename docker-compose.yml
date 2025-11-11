@@ -4,7 +4,7 @@ services:
     container_name: barberapp-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: barberApp_auth
+      MYSQL_DATABASE: barberApp_users
     ports:
       - "4000:3306"
     volumes:
@@ -24,7 +24,7 @@ services:
       dockerfile: Dockerfile
     container_name: barberapp-auth
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/barberApp_auth
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/barberApp_users
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       USER_SERVICE_URL: http://user-service:8081

@@ -28,10 +28,11 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var tokenJWT = jwtUtils.retrieveToken(request);
-
         if (tokenJWT != null) {
+            System.out.println(tokenJWT + "passando por aqui");
             try {
                 var subject = jwtUtils.validate(tokenJWT);
+                System.out.println(subject + "passando por aqui");
                 Optional<User> user = repository.findByEmail(subject);
                 if (user.isPresent()) {
                     var authentication = new UsernamePasswordAuthenticationToken(user, null, user.get().getAuthorities());

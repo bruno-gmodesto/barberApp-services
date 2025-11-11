@@ -39,6 +39,10 @@ public class User implements UserDetails {
     @NotBlank
     private String phone;
 
+    @Column(nullable = false)
+    @NotBlank
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private User_Role userRole = User_Role.USER;
@@ -59,7 +63,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null; // User-service nao gerencia senhas
+        return this.password;
     }
 
     @Override
